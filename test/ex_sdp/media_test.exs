@@ -129,6 +129,29 @@ defmodule ExSDP.MediaTest do
       assert %Media{type: :video, fmt: [98]} = medium
     end
 
+    test "ignores invalid or unsupported lines with a warning" do
+      media = "video 0 RTP/AVP 98"
+
+      attributes =
+        """
+        x=not a real SDP line
+        a=rtpmap:98 H264/90000
+        """
+        |> String.split("\n")
+
+      log =
+        ExUnit.CaptureLog.capture_log(fn ->
+          {:ok, {[""], medium}} =
+            media
+            |> Media.parse()
+            ~> ({:ok, medium} -> Media.parse_optional(attributes, medium))
+
+          assert %Media{type: :video, fmt: [98]} = medium
+        end)
+
+      assert log =~ "Ignoring invalid or unsupported line"
+    end
+
     test "processes audio with attributes without trailing newlines" do
       media = "audio 58712 UDP/TLS/RTP/SAVPF 111"
 
