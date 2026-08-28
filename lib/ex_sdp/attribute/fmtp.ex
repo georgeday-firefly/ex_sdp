@@ -179,6 +179,7 @@ defmodule ExSDP.Attribute.FMTP do
           | :string_nan
           | :string_not_hex
           | :string_not_0_nor_1
+          | :invalid_tx_mode
 
   @spec parse(binary()) :: {:ok, t()} | {:error, reason()}
   def parse(fmtp) do
