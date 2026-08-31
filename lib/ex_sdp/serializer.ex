@@ -39,6 +39,9 @@ defmodule ExSDP.Serializer do
   def maybe_serialize("sprop-parameter-sets", %{sps: sps, pps: pps}),
     do: "sprop-parameter-sets=#{Base.encode64(sps)},#{Base.encode64(pps)}"
 
+  # RFC 7798 (H265): SRST is the default tx-mode, so it is omitted
+  def maybe_serialize("tx-mode", :SRST), do: ""
+
   def maybe_serialize("mode", mode) do
     mode =
       case mode do

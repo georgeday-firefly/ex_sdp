@@ -543,10 +543,7 @@ defimpl String.Chars, for: ExSDP.Attribute.FMTP do
         Serializer.maybe_serialize_base64("sprop-vps", fmtp.sprop_vps),
         Serializer.maybe_serialize_base64("sprop-sps", fmtp.sprop_sps),
         Serializer.maybe_serialize_base64("sprop-pps", fmtp.sprop_pps),
-        if(fmtp.tx_mode == :SRST,
-          do: "",
-          else: Serializer.maybe_serialize("tx-mode", fmtp.tx_mode)
-        ),
+        Serializer.maybe_serialize("tx-mode", fmtp.tx_mode),
         # OPUS
         Serializer.maybe_serialize("maxaveragebitrate", fmtp.maxaveragebitrate),
         Serializer.maybe_serialize("maxplaybackrate", fmtp.maxplaybackrate),
