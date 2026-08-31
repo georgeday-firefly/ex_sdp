@@ -116,9 +116,6 @@ defmodule ExSDP.Attribute.FMTPTest do
     end
 
     test "parses H265 tx-mode with SRST as the default" do
-      # RFC 7798: an absent tx-mode means SRST, so an explicit tx-mode=SRST
-      # must parse equal to a struct built without it (Chrome appends it
-      # to its H265 answers)
       explicit = "98 profile-id=1;tier-flag=0;level-id=153;tx-mode=SRST"
       absent = "98 profile-id=1;tier-flag=0;level-id=153"
 
@@ -131,6 +128,9 @@ defmodule ExSDP.Attribute.FMTPTest do
 
       assert {:ok, %FMTP{tx_mode: :MRST}} =
                FMTP.parse("98 profile-id=1;tier-flag=0;level-id=153;tx-mode=MRST")
+
+      assert {:ok, %FMTP{tx_mode: :MRMT}} =
+               FMTP.parse("98 profile-id=1;tier-flag=0;level-id=153;tx-mode=MRMT")
 
       assert {:error, :invalid_tx_mode} =
                FMTP.parse("98 profile-id=1;tx-mode=BOGUS")

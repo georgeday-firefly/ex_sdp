@@ -88,8 +88,6 @@ defmodule ExSDP.Attribute.FMTP do
                 :randomaccessindication,
                 :streamstateindication,
                 :auxillarydatasizelength,
-                # RFC 7798 (H265): tx-mode defaults to SRST when absent, so the
-                # struct materializes the default; serialization omits it.
                 tx_mode: :SRST,
                 unknown: []
               ]
@@ -113,7 +111,7 @@ defmodule ExSDP.Attribute.FMTP do
           sprop_vps: [binary()] | nil,
           sprop_sps: [binary()] | nil,
           sprop_pps: [binary()] | nil,
-          tx_mode: :SRST | :MRST,
+          tx_mode: :SRST | :MRST | :MRMT,
           # OPUS
           maxaveragebitrate: non_neg_integer() | nil,
           maxplaybackrate: non_neg_integer() | nil,
@@ -250,6 +248,7 @@ defmodule ExSDP.Attribute.FMTP do
     case tx_mode do
       "SRST" -> {rest, %{fmtp | tx_mode: :SRST}}
       "MRST" -> {rest, %{fmtp | tx_mode: :MRST}}
+      "MRMT" -> {rest, %{fmtp | tx_mode: :MRMT}}
       _other -> {:error, :invalid_tx_mode}
     end
   end
